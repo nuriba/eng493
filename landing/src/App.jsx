@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import './styles.css';
+import React, { useEffect, useState } from "react";
+import "./styles.css";
 
-const Hero = ({ title, subtitle, image, children, minHeight = '90vh', curved=false }) => (
-  <section className={`hero ${curved ? 'curved' : ''}`} style={{ backgroundImage: `url(${image})`, minHeight }}>
+const Hero = ({
+  title,
+  subtitle,
+  image,
+  children,
+  minHeight = "90vh",
+  curved = false,
+}) => (
+  <section
+    className={`hero ${curved ? "curved" : ""}`}
+    style={{ backgroundImage: `url(${image})`, minHeight }}
+  >
     <div className="hero-content">
       <h1 className="hero-title">{title}</h1>
       <p className="hero-subtitle">{subtitle}</p>
@@ -25,12 +35,12 @@ const Header = () => {
       }
       setLastY(y);
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [lastY]);
 
   return (
-    <header className={`site-header ${hidden ? 'hidden' : ''}`}>
+    <header className={`site-header ${hidden ? "hidden" : ""}`}>
       <div className="logo-wrap">
         <img src="/u-trainerBABA.png" alt="U-trainer Logo" />
         <div className="brand">U-trainer</div>
@@ -39,50 +49,173 @@ const Header = () => {
   );
 };
 
-const quotes = [
-  { text: '“Belli başlı spor hareketlerini biliyorum ama hangisi benim için doğru emin değilim.”', name: 'Naz — Üniversite Öğrencisi' },
-  { text: '“Başlıyorum ama üç gün sonra motivasyonum bitiyor. Ne yapmam gerektiğini biri söylese iyi olurdu.”', name: 'Said — 20 yaşında' },
-  { text: '“İşten sonra spor yapmak istiyorum ama ne yapacağımı düşünmek bile yoruyor.”', name: 'Harun — Ofis Çalışanı' },
-  { text: '“Gym ortamı kalabalık, herkes bakıyor gibi hissediyorum. Evde doğru bir rehberle çalışsam çok iyi olur.”', name: 'Hasan — Yeni Başlayan' }
+const testimonials = [
+  {
+    text: "Belli başlı spor hareketlerini biliyorum ama hangisi benim için doğru emin değilim. Programımı benim için hazırlayacak bir şeye ihtiyacım var.",
+    name: "Naz",
+    affiliation: "Boğaziçi Üniversitesi'nde Öğrenci",
+  },
+  {
+    text: "Başlıyorum ama üç gün sonra motivasyonum bitiyor. Ne yapmam gerektiğini biri söylese iyi olurdu.",
+    name: "Said",
+    affiliation: "Boğaziçi Üniversitesi'nde Öğrenci",
+  },
 ];
 
 const features = [
-  { title: 'Kişiselleştirilmiş Programlar', items: ['Hedeflerine göre otomatik planlama', 'Kas grupları ve dinlenme süreleri akıllı şekilde ayarlanır'] },
-  { title: 'Dinamik Haftalık Plan', items: ['Ders / iş yoğunluğuna göre uyarlanan takvim', 'Kaçırdığın antrenmanlar otomatik yeniden planlanır'] },
-  { title: 'İlerleme Takibi', items: ['Fotoğraf, ölçü ve ağırlık takibi', 'Küçük hedeflerle motivasyon artırma'] },
-  { title: 'Anlık Koçluk', items: ['Hareketleri nasıl yapacağını anında öğren', 'Sakatlanma riskini azaltan form geri bildirimi'] }
+  {
+    title: "Kişiselleştirilmiş Programlar",
+    items: [
+      "Hedeflerine göre otomatik planlama",
+      "Kas grupları ve dinlenme süreleri akıllı şekilde ayarlanır",
+    ],
+  },
+  {
+    title: "Dinamik Haftalık Plan",
+    items: [
+      "Ders / iş yoğunluğuna göre uyarlanan takvim",
+      "Kaçırdığın antrenmanlar otomatik yeniden planlanır",
+    ],
+  },
+  {
+    title: "İlerleme Takibi",
+    items: [
+      "Fotoğraf, ölçü ve ağırlık takibi",
+      "Küçük hedeflerle motivasyon artırma",
+    ],
+  },
+  {
+    title: "Anlık Koçluk",
+    items: [
+      "Hareketleri nasıl yapacağını anında öğren",
+      "Sakatlanma riskini azaltan form geri bildirimi",
+    ],
+  },
 ];
 
+const PreSignupModal = ({ isOpen, onClose }) => {
+  const [email, setEmail] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log("Email submitted:", email);
+    // You can add API call here
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>
+          ×
+        </button>
+        <h2 className="modal-title">Ön Kayıt</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            className="modal-input"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit" className="modal-submit-btn">
+            Gönder
+          </button>
+        </form>
+        <p className="modal-info">
+          Ürünü ilk deneyenlerden biri olabilmen için bu mail üzerinden
+          iletişime geçeceğiz
+        </p>
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="with-header-offset">
       <Header />
+      <PreSignupModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
       <Hero
         curved
         title="Yapay Zeka Koçunla Fit Kal"
         subtitle="Sana özel bir antrenman programı için artık servet ödemen gerekmiyor.  Koçun her zaman yanında, her idmanda elinin altında."
         image="withAI.png"
       >
-        <a href="#pre-signup" className="btn-primary">Ön Kayıt</a>
+        <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+          Ön Kayıt
+        </button>
       </Hero>
-
-      <Hero
-        title="İnsanlar Neden Zorlanıyor?"
-        subtitle="Çoğu insan spor yapmak istiyor ama nereden başlayacağını bilmiyor. Hazır programlar kişiye uymuyor, hareketleri doğru yapıp yapmadığından emin olamıyor, motivasyon birkaç gün sonra düşüyor. Spor için zaman yaratmak, düzen oturtmak ve doğru rehberliği bulmak zor."
-        image="confusing.png"
-        minHeight="80vh"
-      />
 
       <section className="after-curved">
         <div className="container">
+          <h2 className="section-title">Nasıl Çalışır?</h2>
+          <div className="workflow-steps">
+            <div className="workflow-step">
+              <div className="workflow-number">1</div>
+              <h3 className="workflow-step-title">Tanışma</h3>
+              <p className="workflow-step-desc">
+                Koçun ile tanış, ona kilon, boyun, sağlık durumun, hedeflerin ve
+                imkanların gibi senle ilgili önemli şeylerden bahset
+              </p>
+            </div>
+            <div className="workflow-arrow">→</div>
+            <div className="workflow-step">
+              <div className="workflow-number">2</div>
+              <h3 className="workflow-step-title">Analiz</h3>
+              <p className="workflow-step-desc">
+                Güçlü ve zayıf yanlarını analiz edebilmesi için koçuna fotoğraf
+                gönderebilirsin, böylece koçun senin gerçekten neye ihtiyacın
+                olduğunu anlayabilir
+              </p>
+            </div>
+            <div className="workflow-arrow">→</div>
+            <div className="workflow-step">
+              <div className="workflow-number">3</div>
+              <h3 className="workflow-step-title">Programını Al</h3>
+              <p className="workflow-step-desc">
+                Sana ve hedeflerine en uygun, senin için hazırlanmış anternman
+                programını alabilirsin. Programınla ilgili aklına takılan
+                soruları koçuna sorabilirsin.
+              </p>
+            </div>
+            <div className="workflow-arrow">→</div>
+            <div className="workflow-step">
+              <div className="workflow-number">4</div>
+              <h3 className="workflow-step-title">Takip</h3>
+              <p className="workflow-step-desc">
+                Antrenmanlarının nasıl gittiğinden koçunu haberdar et, gelişimine veya aksaklıklara göre programını güncelleyebilirsin.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="container">
           <h2 className="section-title">Kullanıcılar Ne Diyor?</h2>
-          <p className="section-desc">Gerçek görüşmelerden alınmış ifadeler</p>
-          <div className="grid">
-            {quotes.map(q => (
-              <div key={q.name} className="card quote-card">
-                <div className="quote-mark">"</div>
-                <p>{q.text}</p>
-                <div className="quote-name">{q.name}</div>
+          <div className="testimonials-grid">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="testimonial-card">
+                <div className="testimonial-quote-mark">
+                  <img src="/icons/quote.svg" alt="Quote" />
+                </div>
+                <p className="testimonial-text">{testimonial.text}</p>
+                <div className="testimonial-author">
+                  <div className="testimonial-name">{testimonial.name}</div>
+                  <div className="testimonial-affiliation">
+                    {testimonial.affiliation}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -92,25 +225,36 @@ export default function App() {
       <section>
         <div className="container">
           <h2 className="section-title">U-trainer Sana Ne Sunuyor?</h2>
-          <p className="section-desc">Yapay zeka ve spor psikolojisini birleştirerek sürdürülebilir bir antrenman deneyimi sunuyoruz.</p>
-          <div className="grid">
-            {features.map(f => (
-              <div key={f.title} className="card">
-                <h3>{f.title}</h3>
-                <ul>
-                  {f.items.map(item => <li key={item}>{item}</li>)}
-                </ul>
+          <div className="feature-cards">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <img src="/icons/affordable.svg" alt="Uygun" />
               </div>
-            ))}
+              <h3 className="feature-card-title">Uygun</h3>
+              <p className="feature-card-desc">
+                Özenle eğitilmiş Al teknolojisi sayesinde servet ödemeden
+                programını oluşturabilirsin
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">
+                <img src="/icons/personalized.svg" alt="Kişiye Özel" />
+              </div>
+              <h3 className="feature-card-title">Kişiye Özel</h3>
+              <p className="feature-card-desc">
+                Verdiğin kişisel bilgiler ve antrenman hedeflerin doğrultusunda
+                sana en uygun programa sahip olabilirsin
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="pre-signup">
-        <div className="container" style={{ textAlign: 'center' }}>
-          <h2 className="section-title">Ön Kayıt Bırak</h2>
-          <p className="section-subtitle">U-trainer’ı ilk deneyenlerden olmak için e-posta adresini bırak.</p>
-          <p>(Buraya kayıt formu gelecek)</p>
+        <div className="container" style={{ textAlign: "center" }}>
+          <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+            Ön Kayıt
+          </button>
         </div>
       </section>
     </div>
