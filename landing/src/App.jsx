@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./styles.css";
 
+const ScrollArrow = () => {
+  const handleScrollDown = () => {
+    const firstSection = document.querySelector(".after-curved");
+    if (firstSection) {
+      firstSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div className="scroll-arrow" onClick={handleScrollDown}>
+      <img src="/icons/arrow-down.svg" alt="Scroll down" />
+    </div>
+  );
+};
+
 const Hero = ({
   title,
   subtitle,
@@ -18,6 +33,7 @@ const Hero = ({
       <p className="hero-subtitle">{subtitle}</p>
       {children}
     </div>
+    <ScrollArrow />
   </section>
 );
 
@@ -49,14 +65,40 @@ const Header = () => {
   );
 };
 
+const Avatar = ({ name, size = 64 }) => {
+  // Map names to avatar images
+  const avatarMap = {
+    Naz: "/avatars/avatar_girl.jpeg",
+    Said: "/avatars/avatar_boy.jpeg",
+  };
+
+  const avatarSrc = avatarMap[name] || "/avatars/avatar_boy.jpeg"; // fallback to boy avatar
+
+  return (
+    <div className="testimonial-avatar">
+      <img
+        src={avatarSrc}
+        alt={`${name} avatar`}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "50%",
+          objectFit: "cover",
+          flexShrink: 0,
+        }}
+      />
+    </div>
+  );
+};
+
 const testimonials = [
   {
-    text: "Belli başlı spor hareketlerini biliyorum ama hangisi benim için doğru emin değilim. Programımı benim için hazırlayacak bir şeye ihtiyacım var.",
+    text: "Belli başlı spor hareketlerini biliyorum ama hangisi benim için doğru emin değilim. U-trainer bu konuda bana çok yardımcı oldu.",
     name: "Naz",
     affiliation: "Boğaziçi Üniversitesi'nde Öğrenci",
   },
   {
-    text: "Başlıyorum ama üç gün sonra motivasyonum bitiyor. Ne yapmam gerektiğini biri söylese iyi olurdu.",
+    text: "Başlıyorum ama üç gün sonra motivasyonum bitiyor. Düzenli ve derli toplu bir programımın olması çok iyi oldu.",
     name: "Said",
     affiliation: "Boğaziçi Üniversitesi'nde Öğrenci",
   },
@@ -95,6 +137,7 @@ const features = [
 
 const PreSignupModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   if (!isOpen) return null;
 
@@ -102,34 +145,46 @@ const PreSignupModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     // Handle form submission here
     console.log("Email submitted:", email);
+    setIsSubmitted(true);
     // You can add API call here
+  };
+
+  const handleClose = () => {
+    setIsSubmitted(false);
+    setEmail("");
     onClose();
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={handleClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
+        <button className="modal-close" onClick={handleClose}>
           ×
         </button>
-        <h2 className="modal-title">Ön Kayıt</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            className="modal-input"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit" className="modal-submit-btn">
-            Gönder
-          </button>
-        </form>
-        <p className="modal-info">
-          Ürünü ilk deneyenlerden biri olabilmen için bu mail üzerinden
-          iletişime geçeceğiz
-        </p>
+        {!isSubmitted ? (
+          <>
+            <h2 className="modal-title">Ön Kayıt</h2>
+            <form onSubmit={handleSubmit} data-netlify="true" name="e-mail">
+              <input
+                type="email"
+                className="modal-input"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit" className="modal-submit-btn">
+                Gönder
+              </button>
+            </form>
+          </>
+        ) : (
+          <div className="modal-success">
+            <h2 className="modal-title">
+              Teşekkürler, ön kayıt işlemi başarıyla tamamlandı
+            </h2>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -158,50 +213,6 @@ export default function App() {
 
       <section className="after-curved">
         <div className="container">
-          <h2 className="section-title">Nasıl Çalışır?</h2>
-          <div className="workflow-steps">
-            <div className="workflow-step">
-              <div className="workflow-number">1</div>
-              <h3 className="workflow-step-title">Tanışma</h3>
-              <p className="workflow-step-desc">
-                Koçun ile tanış, ona kilon, boyun, sağlık durumun, hedeflerin ve
-                imkanların gibi senle ilgili önemli şeylerden bahset
-              </p>
-            </div>
-            <div className="workflow-arrow">→</div>
-            <div className="workflow-step">
-              <div className="workflow-number">2</div>
-              <h3 className="workflow-step-title">Analiz</h3>
-              <p className="workflow-step-desc">
-                Güçlü ve zayıf yanlarını analiz edebilmesi için koçuna fotoğraf
-                gönderebilirsin, böylece koçun senin gerçekten neye ihtiyacın
-                olduğunu anlayabilir
-              </p>
-            </div>
-            <div className="workflow-arrow">→</div>
-            <div className="workflow-step">
-              <div className="workflow-number">3</div>
-              <h3 className="workflow-step-title">Programını Al</h3>
-              <p className="workflow-step-desc">
-                Sana ve hedeflerine en uygun, senin için hazırlanmış anternman
-                programını alabilirsin. Programınla ilgili aklına takılan
-                soruları koçuna sorabilirsin.
-              </p>
-            </div>
-            <div className="workflow-arrow">→</div>
-            <div className="workflow-step">
-              <div className="workflow-number">4</div>
-              <h3 className="workflow-step-title">Takip</h3>
-              <p className="workflow-step-desc">
-                Antrenmanlarının nasıl gittiğinden koçunu haberdar et, gelişimine veya aksaklıklara göre programını güncelleyebilirsin.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="container">
           <h2 className="section-title">Kullanıcılar Ne Diyor?</h2>
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
@@ -211,9 +222,12 @@ export default function App() {
                 </div>
                 <p className="testimonial-text">{testimonial.text}</p>
                 <div className="testimonial-author">
-                  <div className="testimonial-name">{testimonial.name}</div>
-                  <div className="testimonial-affiliation">
-                    {testimonial.affiliation}
+                  <Avatar name={testimonial.name} size={40} />
+                  <div className="testimonial-author-info">
+                    <div className="testimonial-name">{testimonial.name}</div>
+                    <div className="testimonial-affiliation">
+                      {testimonial.affiliation}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -245,6 +259,63 @@ export default function App() {
                 Verdiğin kişisel bilgiler ve antrenman hedeflerin doğrultusunda
                 sana en uygun programa sahip olabilirsin
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="container">
+          <h2 className="section-title">Nasıl Çalışır?</h2>
+          <div className="workflow-steps">
+            <div className="workflow-step">
+              <div className="workflow-number">1</div>
+              <h3 className="workflow-step-title">Tanış</h3>
+              <p className="workflow-step-desc">
+                Kilona, boyuna, sağlık durumuna, hedeflerine ve imkanlarına göre
+                seni sana en uygun yapay zeka koçu ile tanıştırıyoruz
+              </p>
+              <div className="workflow-icon">
+                <img src="/u-trainerBABA.png" alt="Tanış Icon" />
+              </div>
+            </div>
+            <div className="workflow-arrow">→</div>
+            <div className="workflow-step">
+              <div className="workflow-number">2</div>
+              <h3 className="workflow-step-title">Analiz</h3>
+              <p className="workflow-step-desc">
+                Güçlü ve zayıf yanlarını analiz edebilmesi için koçuna fotoğraf
+                gönderebilirsin, böylece koçun senin gerçekten neye ihtiyacın
+                olduğunu anlayabilir
+              </p>
+              <div className="workflow-icon">
+                <img src="/u-trainerBABA.png" alt="Analiz Icon" />
+              </div>
+            </div>
+            <div className="workflow-arrow">→</div>
+            <div className="workflow-step">
+              <div className="workflow-number">3</div>
+              <h3 className="workflow-step-title">Programını Al</h3>
+              <p className="workflow-step-desc">
+                Sana ve hedeflerine en uygun, senin için hazırlanmış anternman
+                programını koçundan alabilirsin. Programınla ilgili aklına
+                takılan soruları sorabilirsin.
+              </p>
+              <div className="workflow-icon">
+                <img src="/u-trainerBABA.png" alt="Program Icon" />
+              </div>
+            </div>
+            <div className="workflow-arrow">→</div>
+            <div className="workflow-step">
+              <div className="workflow-number">4</div>
+              <h3 className="workflow-step-title">Takip</h3>
+              <p className="workflow-step-desc">
+                Antrenmanlarının nasıl gittiğinden koçunu haberdar et, koçun
+                gelişimine veya aksaklıklara göre programını güncelleyebilir
+              </p>
+              <div className="workflow-icon">
+                <img src="/u-trainerBABA.png" alt="Takip Icon" />
+              </div>
             </div>
           </div>
         </div>
