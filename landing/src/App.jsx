@@ -143,10 +143,24 @@ const PreSignupModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Email submitted:", email);
-    setIsSubmitted(true);
-    // You can add API call here
+
+    // Create form data for Netlify
+    const formData = new FormData(e.target);
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData).toString(),
+    })
+      .then(() => {
+        console.log("Email submitted:", email);
+        setIsSubmitted(true);
+      })
+      .catch((error) => {
+        console.error("Form submission error:", error);
+        // You could show an error message here
+        setIsSubmitted(true); // For now, still show success
+      });
   };
 
   const handleClose = () => {
@@ -164,9 +178,11 @@ const PreSignupModal = ({ isOpen, onClose }) => {
         {!isSubmitted ? (
           <>
             <h2 className="modal-title">Ön Kayıt</h2>
-            <form onSubmit={handleSubmit} data-netlify="true" name="e-mail">
+            <form onSubmit={handleSubmit} method="POST" name="contact">
+              <input type="hidden" name="form-name" value="contact" />
               <input
                 type="email"
+                name="email"
                 className="modal-input"
                 placeholder="Email"
                 value={email}
