@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./styles.css";
 
+// Google Analytics event tracking function
+const trackEvent = (eventName, parameters = {}) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, parameters);
+  }
+};
+
 const ScrollArrow = () => {
   const handleScrollDown = () => {
     const firstSection = document.querySelector(".after-curved");
@@ -144,6 +151,12 @@ const PreSignupModal = ({ isOpen, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Track form submission attempt
+    trackEvent('form_submit_attempt', {
+      form_name: 'email_signup',
+      email_domain: email.split('@')[1] || 'unknown'
+    });
+
     // Create form data for Netlify
     const formData = new FormData(e.target);
 
@@ -154,10 +167,25 @@ const PreSignupModal = ({ isOpen, onClose }) => {
     })
       .then(() => {
         console.log("Email submitted:", email);
+        
+        // Track successful email signup conversion
+        trackEvent('sign_up', {
+          method: 'email',
+          form_name: 'pre_signup_modal',
+          email_domain: email.split('@')[1] || 'unknown'
+        });
+        
         setIsSubmitted(true);
       })
       .catch((error) => {
         console.error("Form submission error:", error);
+        
+        // Track form submission error
+        trackEvent('form_error', {
+          form_name: 'email_signup',
+          error_type: 'submission_failed'
+        });
+        
         // You could show an error message here
         setIsSubmitted(true); // For now, still show success
       });
@@ -209,6 +237,23 @@ const PreSignupModal = ({ isOpen, onClose }) => {
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Track modal open events
+  const handleModalOpen = () => {
+    trackEvent('modal_open', {
+      modal_type: 'pre_signup',
+      trigger_location: 'hero_section'
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleModalOpenFooter = () => {
+    trackEvent('modal_open', {
+      modal_type: 'pre_signup',
+      trigger_location: 'footer_section'
+    });
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="with-header-offset">
       <Header />
@@ -222,7 +267,7 @@ export default function App() {
         subtitle="Sana özel bir antrenman programı için artık servet ödemen gerekmiyor.  Koçun her zaman yanında, her idmanda elinin altında."
         image="withAI.png"
       >
-        <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+        <button onClick={handleModalOpen} className="btn-primary">
           Ön Kayıt
         </button>
       </Hero>
@@ -339,7 +384,7 @@ export default function App() {
 
       <section id="pre-signup">
         <div className="container" style={{ textAlign: "center" }}>
-          <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+          <button onClick={handleModalOpenFooter} className="btn-primary">
             Ön Kayıt
           </button>
         </div>
