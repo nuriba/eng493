@@ -337,7 +337,7 @@ export default function App() {
                 seni sana en uygun yapay zeka koçu ile tanıştırıyoruz
               </p>
               <div className="workflow-icon">
-                <img src="/u-trainerBABA.png" alt="Tanış Icon" />
+                <img src="/tanis-icon.png" alt="Tanış Icon" />
               </div>
             </div>
             <div className="workflow-arrow">→</div>
@@ -350,7 +350,7 @@ export default function App() {
                 olduğunu anlayabilir
               </p>
               <div className="workflow-icon">
-                <img src="/u-trainerBABA.png" alt="Analiz Icon" />
+                <img src="/analiz-icon.png" alt="Analiz Icon" />
               </div>
             </div>
             <div className="workflow-arrow">→</div>
@@ -363,7 +363,7 @@ export default function App() {
                 takılan soruları sorabilirsin.
               </p>
               <div className="workflow-icon">
-                <img src="/u-trainerBABA.png" alt="Program Icon" />
+                <img src="/program-icon.png" alt="Program Icon" />
               </div>
             </div>
             <div className="workflow-arrow">→</div>
@@ -375,7 +375,7 @@ export default function App() {
                 gelişimine veya aksaklıklara göre programını güncelleyebilir
               </p>
               <div className="workflow-icon">
-                <img src="/u-trainerBABA.png" alt="Takip Icon" />
+                <img src="/koc-icon.png" alt="Takip Icon" />
               </div>
             </div>
           </div>
