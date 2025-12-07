@@ -3,8 +3,8 @@ import "./styles.css";
 
 // Google Analytics event tracking function
 const trackEvent = (eventName, parameters = {}) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, parameters);
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", eventName, parameters);
   }
 };
 
@@ -75,11 +75,11 @@ const Header = () => {
 const Avatar = ({ name, size = 64 }) => {
   // Map names to avatar images
   const avatarMap = {
-    Naz: "/avatars/avatar_girl.jpeg",
-    Said: "/avatars/avatar_boy.jpeg",
+    Osman: "/avatars/avatar_boyy.jpeg",
+    Nuri: "/avatars/avatar_boy2.jpeg",
   };
 
-  const avatarSrc = avatarMap[name] || "/avatars/avatar_boy.jpeg"; // fallback to boy avatar
+  const avatarSrc = avatarMap[name] || "/avatars/avatar_boyy.jpeg"; // fallback to boy avatar
 
   return (
     <div className="testimonial-avatar">
@@ -101,12 +101,12 @@ const Avatar = ({ name, size = 64 }) => {
 const testimonials = [
   {
     text: "Belli başlı spor hareketlerini biliyorum ama hangisi benim için doğru emin değilim. U-trainer bu konuda bana çok yardımcı oldu.",
-    name: "Naz",
+    name: "Osman",
     affiliation: "Boğaziçi Üniversitesi'nde Öğrenci",
   },
   {
     text: "Başlıyorum ama üç gün sonra motivasyonum bitiyor. Düzenli ve derli toplu bir programımın olması çok iyi oldu.",
-    name: "Said",
+    name: "Nuri",
     affiliation: "Boğaziçi Üniversitesi'nde Öğrenci",
   },
 ];
@@ -152,9 +152,9 @@ const PreSignupModal = ({ isOpen, onClose }) => {
     e.preventDefault();
 
     // Track form submission attempt
-    trackEvent('form_submit_attempt', {
-      form_name: 'email_signup',
-      email_domain: email.split('@')[1] || 'unknown'
+    trackEvent("form_submit_attempt", {
+      form_name: "email_signup",
+      email_domain: email.split("@")[1] || "unknown",
     });
 
     // Create form data for Netlify
@@ -167,25 +167,25 @@ const PreSignupModal = ({ isOpen, onClose }) => {
     })
       .then(() => {
         console.log("Email submitted:", email);
-        
+
         // Track successful email signup conversion
-        trackEvent('sign_up', {
-          method: 'email',
-          form_name: 'pre_signup_modal',
-          email_domain: email.split('@')[1] || 'unknown'
+        trackEvent("sign_up", {
+          method: "email",
+          form_name: "pre_signup_modal",
+          email_domain: email.split("@")[1] || "unknown",
         });
-        
+
         setIsSubmitted(true);
       })
       .catch((error) => {
         console.error("Form submission error:", error);
-        
+
         // Track form submission error
-        trackEvent('form_error', {
-          form_name: 'email_signup',
-          error_type: 'submission_failed'
+        trackEvent("form_error", {
+          form_name: "email_signup",
+          error_type: "submission_failed",
         });
-        
+
         // You could show an error message here
         setIsSubmitted(true); // For now, still show success
       });
@@ -217,6 +217,9 @@ const PreSignupModal = ({ isOpen, onClose }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+              <p className="modal-desc">
+                Uygulamayı ilk kullanlardan biri olmanız için size mail atacağız
+              </p>
               <button type="submit" className="modal-submit-btn">
                 Gönder
               </button>
@@ -239,17 +242,17 @@ export default function App() {
 
   // Track modal open events
   const handleModalOpen = () => {
-    trackEvent('modal_open', {
-      modal_type: 'pre_signup',
-      trigger_location: 'hero_section'
+    trackEvent("modal_open", {
+      modal_type: "pre_signup",
+      trigger_location: "hero_section",
     });
     setIsModalOpen(true);
   };
 
   const handleModalOpenFooter = () => {
-    trackEvent('modal_open', {
-      modal_type: 'pre_signup',
-      trigger_location: 'footer_section'
+    trackEvent("modal_open", {
+      modal_type: "pre_signup",
+      trigger_location: "footer_section",
     });
     setIsModalOpen(true);
   };
@@ -336,9 +339,7 @@ export default function App() {
                 Kilona, boyuna, sağlık durumuna, hedeflerine ve imkanlarına göre
                 seni sana en uygun yapay zeka koçu ile tanıştırıyoruz
               </p>
-              <div className="workflow-icon">
-                <img src="/tanis-icon.png" alt="Tanış Icon" />
-              </div>
+              {/* icon removed */}
             </div>
             <div className="workflow-arrow">→</div>
             <div className="workflow-step">
@@ -349,9 +350,7 @@ export default function App() {
                 gönderebilirsin, böylece koçun senin gerçekten neye ihtiyacın
                 olduğunu anlayabilir
               </p>
-              <div className="workflow-icon">
-                <img src="/analiz-icon.png" alt="Analiz Icon" />
-              </div>
+              {/* icon removed */}
             </div>
             <div className="workflow-arrow">→</div>
             <div className="workflow-step">
@@ -362,9 +361,7 @@ export default function App() {
                 programını koçundan alabilirsin. Programınla ilgili aklına
                 takılan soruları sorabilirsin.
               </p>
-              <div className="workflow-icon">
-                <img src="/program-icon.png" alt="Program Icon" />
-              </div>
+              {/* icon removed */}
             </div>
             <div className="workflow-arrow">→</div>
             <div className="workflow-step">
@@ -374,9 +371,7 @@ export default function App() {
                 Antrenmanlarının nasıl gittiğinden koçunu haberdar et, koçun
                 gelişimine veya aksaklıklara göre programını güncelleyebilir
               </p>
-              <div className="workflow-icon">
-                <img src="/koc-icon.png" alt="Takip Icon" />
-              </div>
+              {/* icon removed */}
             </div>
           </div>
         </div>
